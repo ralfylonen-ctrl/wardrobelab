@@ -6,9 +6,18 @@
   <title>Wardrobe Lab - Try On</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
 </head>
-<body class="bg-gradient-to-br from-green-100 to-green-200 font-sans min-h-screen flex items-center justify-center">
+<body class="bg-gradient-to-br from-green-100 to-green-200 font-sans min-h-screen flex flex-col items-center justify-start py-10">
 
-  <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full p-10 flex flex-col md:flex-row gap-10">
+  <!-- Login -->
+  <div id="loginSection" class="w-full max-w-sm mx-auto mb-8 bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center">
+    <h2 class="text-2xl font-bold text-green-800 mb-4">Login</h2>
+    <input id="loginUser" type="text" placeholder="Username" class="mb-3 p-2 border rounded w-full">
+    <input id="loginPass" type="password" placeholder="Password" class="mb-3 p-2 border rounded w-full">
+    <button id="submitLogin" class="bg-green-600 text-white font-bold py-2 rounded-full w-full hover:bg-green-700 transition mb-2">Login</button>
+  </div>
+
+  <!-- Área principal de upload -->
+  <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full p-10 flex flex-col md:flex-row gap-10 hidden" id="mainContent">
     
     <!-- Upload Clothing -->
     <div class="flex-1 flex flex-col items-center text-center bg-green-50 rounded-2xl p-6 border-2 border-dashed border-green-300 hover:border-green-500 transition">
@@ -29,7 +38,7 @@
   </div>
 
   <!-- Generate Button -->
-  <div class="mt-8 flex justify-center w-full">
+  <div class="mt-8 flex justify-center w-full hidden" id="generateSection">
     <button id="generateBtn" class="bg-green-600 text-white font-bold px-10 py-3 rounded-full text-lg hover:bg-green-700 transition transform hover:scale-105">
       Generate Outfit
     </button>
@@ -41,11 +50,36 @@
   </div>
 
   <script>
+    const loginBtn = document.getElementById('submitLogin');
+    const loginUser = document.getElementById('loginUser');
+    const loginPass = document.getElementById('loginPass');
+    const loginSection = document.getElementById('loginSection');
+
+    const mainContent = document.getElementById('mainContent');
+    const generateSection = document.getElementById('generateSection');
+
     const clothingInput = document.getElementById('clothingImg');
     const personInput = document.getElementById('personImg');
     const clothingPreview = document.getElementById('clothingPreview');
     const personPreview = document.getElementById('personPreview');
     const resultImg = document.getElementById('resultImg');
+
+    // Login
+    loginBtn.onclick = () => {
+      const username = loginUser.value.trim();
+      const password = loginPass.value.trim();
+
+      const storedPass = localStorage.getItem(username);
+
+      if(storedPass && storedPass === password){
+        // Esconde login e mostra área principal
+        loginSection.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+        generateSection.classList.remove('hidden');
+      } else {
+        alert("Invalid username or password.");
+      }
+    }
 
     // Mostrar preview da roupa
     clothingInput.onchange = () => {
@@ -65,16 +99,15 @@
       }
     }
 
-    // Botão de gerar (vai chamar a IA no backend)
+    // Botão de gerar (chamar IA depois)
     document.getElementById('generateBtn').onclick = () => {
       if(!clothingInput.files[0] || !personInput.files[0]){
         alert("Please upload both clothing and your photo.");
         return;
       }
-      // Aqui você chamaria o backend que envia para a IA
-      alert("This is where the AI generation would happen!");
-      // Exemplo: mostrar resultado fake
-      resultImg.src = clothingPreview.src; // só para teste visual
+      // Exemplo fake
+      alert("Here the AI generation would happen!");
+      resultImg.src = clothingPreview.src; // apenas teste
       resultImg.classList.remove('hidden');
     }
   </script>
