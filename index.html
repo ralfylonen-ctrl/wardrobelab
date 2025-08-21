@@ -4,13 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wardrobe Lab</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 </head>
 <body class="bg-[#f8fcf9] font-sans flex items-center justify-center min-h-screen">
 
 <!-- Tela inicial -->
 <div id="homeScreen" class="bg-white rounded-xl shadow-lg max-w-sm w-full p-6 flex flex-col items-center text-center">
-  <img src="mainimg" alt="Wardrobe Lab" class="w-full h-auto rounded-lg mb-6">
+  <img src="mainimg.png" alt="Wardrobe Lab" class="w-full h-auto rounded-lg mb-6">
   <h2 class="text-2xl font-bold text-[#0c1d13] mb-2">Login or Create Account to get Started!</h2>
   <p class="text-[#0c1d13] text-base mb-6">
     Try on clothes digitally—just upload your photo and get started!
@@ -47,18 +51,10 @@
   <button id="backFromRegister" class="text-sm text-gray-500 underline">Back</button>
 </div>
 
-<!-- Main page -->
-<div id="mainPage" class="hidden flex flex-col items-center justify-center min-h-screen text-center">
-  <h1 class="text-3xl font-bold text-[#0c1d13] mb-4">Welcome to Wardrobe Lab!</h1>
-  <p class="text-[#0c1d13] text-lg">You're now logged in and ready to try new outfits digitally.</p>
-</div>
-
 <script>
-  // Referências das telas
   const home = document.getElementById('homeScreen');
   const login = document.getElementById('loginScreen');
   const register = document.getElementById('registerScreen');
-  const mainPage = document.getElementById('mainPage');
 
   // Botões da tela inicial
   document.getElementById('loginBtn').onclick = () => {
@@ -96,23 +92,20 @@
       return;
     }
 
-    // Verifica se usuário já existe
     if(localStorage.getItem(username)){
       alert('Username already taken. Choose another.');
       return;
     }
 
-    // Validação da senha
     if(!validatePassword(password)){
       alert('Password must be at least 6 characters, include 1 uppercase letter, 1 number, and 1 special character.');
       return;
     }
 
-    // Salva conta
     localStorage.setItem(username, password);
-    alert('Account created! You can now login.');
-    register.classList.add('hidden');
-    mainPage.classList.remove('hidden');
+    alert('Account created! Redirecting to homepage...');
+    // Redireciona para homepg.html
+    window.location.href = 'homepg.html';
   }
 
   // Login
@@ -120,9 +113,10 @@
     const username = document.getElementById('loginUser').value.trim();
     const password = document.getElementById('loginPass').value.trim();
     const storedPass = localStorage.getItem(username);
+
     if(storedPass && storedPass === password){
-      login.classList.add('hidden');
-      mainPage.classList.remove('hidden');
+      // Redireciona para homepg.html
+      window.location.href = 'homepg.html';
     } else {
       alert('Invalid username or password.');
     }
