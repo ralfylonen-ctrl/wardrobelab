@@ -80,18 +80,39 @@
     home.classList.remove('hidden');
   }
 
-  // Cadastro
+  // Função de validação de senha
+  function validatePassword(password) {
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
+    return regex.test(password);
+  }
+
+  // Cadastro com validação
   document.getElementById('submitRegister').onclick = () => {
     const username = document.getElementById('regUser').value.trim();
     const password = document.getElementById('regPass').value.trim();
-    if(username && password){
-      localStorage.setItem(username, password);
-      alert('Account created! You can now login.');
-      register.classList.add('hidden');
-      mainPage.classList.remove('hidden');
-    } else {
+
+    if (!username || !password) {
       alert('Please enter username and password.');
+      return;
     }
+
+    // Verifica se usuário já existe
+    if (localStorage.getItem(username)) {
+      alert('Username already taken. Choose another one.');
+      return;
+    }
+
+    // Valida senha
+    if (!validatePassword(password)) {
+      alert('Password must be at least 6 characters long, include 1 uppercase letter, 1 number and 1 special character.');
+      return;
+    }
+
+    // Salva usuário e senha
+    localStorage.setItem(username, password);
+    alert('Account created! You can now login.');
+    register.classList.add('hidden');
+    mainPage.classList.remove('hidden');
   }
 
   // Login
@@ -99,7 +120,8 @@
     const username = document.getElementById('loginUser').value.trim();
     const password = document.getElementById('loginPass').value.trim();
     const storedPass = localStorage.getItem(username);
-    if(storedPass && storedPass === password){
+
+    if (storedPass && storedPass === password) {
       login.classList.add('hidden');
       mainPage.classList.remove('hidden');
     } else {
