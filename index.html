@@ -5,32 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wardrobe Lab</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?display=swap&family=Lexend:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900" rel="stylesheet">
 </head>
 <body class="bg-[#f8fcf9] font-sans flex items-center justify-center min-h-screen">
 
-  <div class="bg-white rounded-xl shadow-lg max-w-sm w-full p-6 flex flex-col items-center text-center">
-   <img src="mainimg" alt="Wardrobe Lab" class="w-full h-auto rounded-lg mb-6">
-
-    
-    <h2 class="text-2xl font-bold text-[#0c1d13] mb-2">Login and Create Account</h2>
-    
-    <p class="text-[#0c1d13] text-base mb-6">
-      Upload your photo and create an account to try new clothes digitally!
-    </p>
-
-    <div class="flex gap-4 w-full">
-      <button class="flex-1 bg-[#57ff9a] text-[#0c1d13] font-bold py-3 rounded-full 
-                     transform transition duration-300 ease-out hover:scale-110">
-        Login
-      </button>
-      <button class="flex-1 bg-[#57ff9a] text-[#0c1d13] font-bold py-3 rounded-full 
-                     transform transition duration-300 ease-out hover:scale-110">
-        Create Account
-      </button>
-    </div>
+<!-- Tela inicial -->
+<div id="homeScreen" class="bg-white rounded-xl shadow-lg max-w-sm w-full p-6 flex flex-col items-center text-center">
+  <img src="mainimg.png" alt="Wardrobe Lab" class="w-full h-auto rounded-lg mb-6">
+  <h2 class="text-2xl font-bold text-[#0c1d13] mb-2">Login or Create Account to get Started!</h2>
+  <p class="text-[#0c1d13] text-base mb-6">
+    Try on clothes digitally—just upload your photo and get started!
+  </p>
+  <div class="flex gap-4 w-full">
+    <button id="loginBtn" class="flex-1 bg-[#57ff9a] text-[#0c1d13] font-bold py-3 rounded-full 
+                   transform transition duration-300 ease-out hover:scale-110">
+      Login
+    </button>
+    <button id="createBtn" class="flex-1 bg-[#57ff9a] text-[#0c1d13] font-bold py-3 rounded-full 
+                   transform transition duration-300 ease-out hover:scale-110">
+      Create Account
+    </button>
   </div>
+</div>
+
+<!-- Tela de Login -->
+<div id="loginScreen" class="hidden bg-white rounded-xl shadow-lg max-w-sm w-full p-6 flex flex-col items-center text-center">
+  <h2 class="text-2xl font-bold text-[#0c1d13] mb-4">Login</h2>
+  <input id="loginUser" type="text" placeholder="Username" class="mb-3 p-2 border rounded w-full">
+  <input id="loginPass" type="password" placeholder="Password" class="mb-3 p-2 border rounded w-full">
+  <button id="submitLogin" class="bg-[#57ff9a] text-[#0c1d13] font-bold py-2 rounded-full 
+                   transform transition duration-300 ease-out hover:scale-110 mb-2">Login</button>
+  <button id="backFromLogin" class="text-sm text-gray-500 underline">Back</button>
+</div>
+
+<!-- Tela de Cadastro -->
+<div id="registerScreen" class="hidden bg-white rounded-xl shadow-lg max-w-sm w-full p-6 flex flex-col items-center text-center">
+  <h2 class="text-2xl font-bold text-[#0c1d13] mb-4">Create Account</h2>
+  <input id="regUser" type="text" placeholder="Username" class="mb-3 p-2 border rounded w-full">
+  <input id="regPass" type="password" placeholder="Password" class="mb-3 p-2 border rounded w-full">
+  <button id="submitRegister" class="bg-[#57ff9a] text-[#0c1d13] font-bold py-2 rounded-full 
+                     transform transition duration-300 ease-out hover:scale-110 mb-2">Register</button>
+  <button id="backFromRegister" class="text-sm text-gray-500 underline">Back</button>
+</div>
+
+<!-- Main page -->
+<div id="mainPage" class="hidden flex flex-col items-center justify-center min-h-screen text-center">
+  <h1 class="text-3xl font-bold text-[#0c1d13] mb-4">Welcome to Wardrobe Lab!</h1>
+  <p class="text-[#0c1d13] text-lg">You're now logged in and ready to try new outfits digitally.</p>
+</div>
+
+<script>
+  // Referências das telas
+  const home = document.getElementById('homeScreen');
+  const login = document.getElementById('loginScreen');
+  const register = document.getElementById('registerScreen');
+  const mainPage = document.getElementById('mainPage');
+
+  // Botões da tela inicial
+  document.getElementById('loginBtn').onclick = () => {
+    home.classList.add('hidden');
+    login.classList.remove('hidden');
+  }
+  document.getElementById('createBtn').onclick = () => {
+    home.classList.add('hidden');
+    register.classList.remove('hidden');
+  }
+
+  // Botões de voltar
+  document.getElementById('backFromLogin').onclick = () => {
+    login.classList.add('hidden');
+    home.classList.remove('hidden');
+  }
+  document.getElementById('backFromRegister').onclick = () => {
+    register.classList.add('hidden');
+    home.classList.remove('hidden');
+  }
+
+  // Cadastro
+  document.getElementById('submitRegister').onclick = () => {
+    const username = document.getElementById('regUser').value.trim();
+    const password = document.getElementById('regPass').value.trim();
+    if(username && password){
+      localStorage.setItem(username, password);
+      alert('Account created! You can now login.');
+      register.classList.add('hidden');
+      mainPage.classList.remove('hidden');
+    } else {
+      alert('Please enter username and password.');
+    }
+  }
+
+  // Login
+  document.getElementById('submitLogin').onclick = () => {
+    const username = document.getElementById('loginUser').value.trim();
+    const password = document.getElementById('loginPass').value.trim();
+    const storedPass = localStorage.getItem(username);
+    if(storedPass && storedPass === password){
+      login.classList.add('hidden');
+      mainPage.classList.remove('hidden');
+    } else {
+      alert('Invalid username or password.');
+    }
+  }
+</script>
 
 </body>
 </html>
